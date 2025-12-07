@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
 ## Fetching Puzzle Inputs
 
-Inputs are user-specific and require authentication. Use the `web-browser` skill to fetch them:
+Inputs are user-specific and require authentication. Use the `web-browser` skill (available in `.claude/skills/web-browser`) to fetch them:
 
 1. Launch the skill: `skill: "web-browser"`
 2. Start Chrome: `./tools/start.js`
@@ -54,10 +54,10 @@ Inputs are user-specific and require authentication. Use the `web-browser` skill
 
 Example workflow:
 ```bash
-cd /Users/mitsuhiko/.claude/skills/web-browser && ./tools/start.js
+cd .claude/skills/web-browser && ./tools/start.js
 # Wait a moment for Chrome to start
-cd /Users/mitsuhiko/.claude/skills/web-browser && ./tools/nav.js https://adventofcode.com/2025/day/2/input
-cd /Users/mitsuhiko/.claude/skills/web-browser && ./tools/eval.js 'document.body.innerText' > /Users/mitsuhiko/Development/aoc25/day02.txt
+cd .claude/skills/web-browser && ./tools/nav.js https://adventofcode.com/2025/day/2/input
+cd .claude/skills/web-browser && ./tools/eval.js 'document.body.innerText' > day02.txt
 ```
 
 Note: The user's session cookies are needed to fetch inputs, so the web-browser approach is required rather than simple curl commands.
