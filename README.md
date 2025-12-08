@@ -3,3 +3,5 @@
 This repository is 100% vibe coded.  I don't have time for the calendar this
 year, but I am still curious how the agent does.  So far this all has been
 done exclusively by Claude Code.
+
+This references the web-browser skill [from my skills repo](github.com/mitsuhiko/agent-commands/).
