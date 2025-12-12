@@ -1,6 +1,6 @@
 def parse_problems(input_text):
     """Parse the worksheet into a list of (numbers, operator) tuples."""
-    lines = input_text.rstrip('\n').split('\n')
+    lines = input_text.rstrip("\n").split("\n")
 
     # Pad all lines to the same length
     max_len = max(len(line) for line in lines)
@@ -14,7 +14,7 @@ def parse_problems(input_text):
     current_cols = []
 
     for col in cols:
-        if all(c == ' ' for c in col):
+        if all(c == " " for c in col):
             if current_cols:
                 problems.append(current_cols)
                 current_cols = []
@@ -28,7 +28,7 @@ def parse_problems(input_text):
     result = []
     for prob_cols in problems:
         # Transpose back to rows
-        rows = [''.join(row) for row in zip(*prob_cols)]
+        rows = ["".join(row) for row in zip(*prob_cols)]
 
         # Last row is operator, rest are numbers
         operator = rows[-1].strip()
@@ -48,7 +48,7 @@ def solve_part1(input_text):
 
     total = 0
     for numbers, op in problems:
-        if op == '+':
+        if op == "+":
             result = sum(numbers)
         else:  # op == '*'
             result = 1
@@ -61,7 +61,7 @@ def solve_part1(input_text):
 
 def parse_problems_part2(input_text):
     """Parse worksheet for Part 2: numbers are read column-wise (vertically)."""
-    lines = input_text.rstrip('\n').split('\n')
+    lines = input_text.rstrip("\n").split("\n")
 
     # Pad all lines to the same length
     max_len = max(len(line) for line in lines)
@@ -75,7 +75,7 @@ def parse_problems_part2(input_text):
     current_cols = []
 
     for col in cols:
-        if all(c == ' ' for c in col):
+        if all(c == " " for c in col):
             if current_cols:
                 problems.append(current_cols)
                 current_cols = []
@@ -91,7 +91,7 @@ def parse_problems_part2(input_text):
         # Find operator from the operator row (last char of each column)
         operator = None
         for col in prob_cols:
-            if col[-1] in '+*':
+            if col[-1] in "+*":
                 operator = col[-1]
                 break
 
@@ -99,7 +99,7 @@ def parse_problems_part2(input_text):
         numbers = []
         for col in prob_cols:
             # Take all rows except the last (operator row)
-            digits = ''.join(col[:-1]).replace(' ', '')
+            digits = "".join(col[:-1]).replace(" ", "")
             if digits:
                 numbers.append(int(digits))
 
@@ -113,7 +113,7 @@ def solve_part2(input_text):
 
     total = 0
     for numbers, op in problems:
-        if op == '+':
+        if op == "+":
             result = sum(numbers)
         else:  # op == '*'
             result = 1

@@ -15,18 +15,18 @@ def is_invalid_id(num):
     second_half = s[mid:]
 
     # Check if they match and no leading zeros (except for "0" itself)
-    if first_half == second_half and (first_half[0] != '0' or first_half == '0'):
+    if first_half == second_half and (first_half[0] != "0" or first_half == "0"):
         return True
     return False
 
 
 def solve_part1(input_text):
     """Find and sum all invalid IDs in the given ranges."""
-    ranges = input_text.strip().split(',')
+    ranges = input_text.strip().split(",")
     total = 0
 
     for range_str in ranges:
-        start, end = map(int, range_str.split('-'))
+        start, end = map(int, range_str.split("-"))
         for num in range(start, end + 1):
             if is_invalid_id(num):
                 total += num
@@ -50,7 +50,7 @@ def is_invalid_id_part2(num):
         if length % pattern_len == 0:
             pattern = s[:pattern_len]
             # Check if no leading zeros (except for "0" itself)
-            if pattern[0] == '0' and pattern != '0':
+            if pattern[0] == "0" and pattern != "0":
                 continue
             # Check if the entire string is this pattern repeated
             num_repetitions = length // pattern_len
@@ -62,11 +62,11 @@ def is_invalid_id_part2(num):
 
 def solve_part2(input_text):
     """Find and sum all invalid IDs using Part 2 rules (at least 2 repetitions)."""
-    ranges = input_text.strip().split(',')
+    ranges = input_text.strip().split(",")
     total = 0
 
     for range_str in ranges:
-        start, end = map(int, range_str.split('-'))
+        start, end = map(int, range_str.split("-"))
         for num in range(start, end + 1):
             if is_invalid_id_part2(num):
                 total += num

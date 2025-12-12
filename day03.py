@@ -1,6 +1,6 @@
 def solve_part1(input_text):
     total = 0
-    for line in input_text.strip().split('\n'):
+    for line in input_text.strip().split("\n"):
         # Find maximum two-digit number by selecting any two digits in order
         max_joltage = 0
         for i in range(len(line)):
@@ -10,9 +10,10 @@ def solve_part1(input_text):
         total += max_joltage
     return total
 
+
 def solve_part2(input_text):
     total = 0
-    for line in input_text.strip().split('\n'):
+    for line in input_text.strip().split("\n"):
         # Select 12 digits to maximize the 12-digit number
         # Greedy: at each position, pick the largest digit available
         n = len(line)
@@ -32,9 +33,10 @@ def solve_part2(input_text):
             start = best_idx + 1
             remaining -= 1
 
-        joltage = int(''.join(result))
+        joltage = int("".join(result))
         total += joltage
     return total
+
 
 if __name__ == "__main__":
     with open("day03.txt") as f:

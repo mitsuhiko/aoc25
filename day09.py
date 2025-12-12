@@ -1,8 +1,8 @@
 def solve_part1(input_text):
     # Parse coordinates
     red_tiles = []
-    for line in input_text.strip().split('\n'):
-        x, y = map(int, line.split(','))
+    for line in input_text.strip().split("\n"):
+        x, y = map(int, line.split(","))
         red_tiles.append((x, y))
 
     # Find largest rectangle area using any two red tiles as opposite corners
@@ -19,11 +19,12 @@ def solve_part1(input_text):
 
     return max_area
 
+
 def solve_part2(input_text):
     # Parse coordinates
     red_tiles = []
-    for line in input_text.strip().split('\n'):
-        x, y = map(int, line.split(','))
+    for line in input_text.strip().split("\n"):
+        x, y = map(int, line.split(","))
         red_tiles.append((x, y))
 
     n = len(red_tiles)
@@ -62,7 +63,12 @@ def solve_part2(input_text):
     def rectangle_valid(rx_min, rx_max, ry_min, ry_max):
         """Check if rectangle is entirely inside polygon"""
         # Check all 4 geometric corners are inside or on boundary
-        corners = [(rx_min, ry_min), (rx_min, ry_max), (rx_max, ry_min), (rx_max, ry_max)]
+        corners = [
+            (rx_min, ry_min),
+            (rx_min, ry_max),
+            (rx_max, ry_min),
+            (rx_max, ry_max),
+        ]
         for cx, cy in corners:
             if not point_inside_or_on_boundary(cx, cy):
                 return False
@@ -122,6 +128,7 @@ def solve_part2(input_text):
                 max_area = area
 
     return max_area
+
 
 if __name__ == "__main__":
     with open("day09.txt") as f:

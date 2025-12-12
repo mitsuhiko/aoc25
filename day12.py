@@ -1,28 +1,28 @@
 def parse_input(input_text):
-    lines = input_text.strip().split('\n')
+    lines = input_text.strip().split("\n")
 
     shapes = {}
     regions = []
 
     i = 0
     # Parse shapes
-    while i < len(lines) and ':' in lines[i] and 'x' not in lines[i]:
+    while i < len(lines) and ":" in lines[i] and "x" not in lines[i]:
         # Shape definition like "0:"
-        shape_id = int(lines[i].rstrip(':'))
+        shape_id = int(lines[i].rstrip(":"))
         i += 1
         shape_lines = []
         while i < len(lines) and lines[i] and not lines[i][0].isdigit():
             shape_lines.append(lines[i])
             i += 1
         # Skip empty line
-        if i < len(lines) and lines[i] == '':
+        if i < len(lines) and lines[i] == "":
             i += 1
 
         # Convert shape to set of coordinates
         coords = set()
         for y, row in enumerate(shape_lines):
             for x, ch in enumerate(row):
-                if ch == '#':
+                if ch == "#":
                     coords.add((x, y))
         shapes[shape_id] = normalize_shape(coords)
 
@@ -33,8 +33,8 @@ def parse_input(input_text):
             i += 1
             continue
         # Format: "44x35: 29 25 21 25 28 26"
-        parts = line.split(': ')
-        dims = parts[0].split('x')
+        parts = line.split(": ")
+        dims = parts[0].split("x")
         width, height = int(dims[0]), int(dims[1])
         counts = list(map(int, parts[1].split()))
         regions.append((width, height, counts))
@@ -119,8 +119,10 @@ def solve_region(width, height, shapes_with_orientations, pieces_to_place):
         return True
 
     # Calculate total cells needed
-    total_cells_needed = sum(len(shapes_with_orientations[sid][0]) * pieces_to_place[sid]
-                             for sid in range(len(pieces_to_place)))
+    total_cells_needed = sum(
+        len(shapes_with_orientations[sid][0]) * pieces_to_place[sid]
+        for sid in range(len(pieces_to_place))
+    )
     total_cells_available = width * height
 
     if total_cells_needed > total_cells_available:
@@ -173,15 +175,19 @@ def solve_region_optimized(width, height, shapes_with_orientations, pieces_to_pl
         return True
 
     # Quick check: total cells needed
-    total_cells_needed = sum(len(shapes_with_orientations[sid][0]) * pieces_to_place[sid]
-                             for sid in range(len(pieces_to_place)))
+    total_cells_needed = sum(
+        len(shapes_with_orientations[sid][0]) * pieces_to_place[sid]
+        for sid in range(len(pieces_to_place))
+    )
     total_cells_available = width * height
 
     if total_cells_needed > total_cells_available:
         return False
 
     # Sort pieces by size (largest first) for better pruning
-    pieces_sorted = sorted(range(len(pieces)), key=lambda i: -len(shapes_with_orientations[pieces[i]][0]))
+    pieces_sorted = sorted(
+        range(len(pieces)), key=lambda i: -len(shapes_with_orientations[pieces[i]][0])
+    )
 
     def backtrack(idx):
         if idx >= len(pieces_sorted):

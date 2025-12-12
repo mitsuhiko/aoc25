@@ -1,5 +1,5 @@
 def solve_part1(input_text):
-    lines = input_text.strip().split('\n')
+    lines = input_text.strip().split("\n")
     grid = [list(line) for line in lines]
     rows = len(grid)
     cols = len(grid[0]) if rows > 0 else 0
@@ -9,7 +9,7 @@ def solve_part1(input_text):
     start_row = 0
     for row in range(rows):
         for col in range(cols):
-            if grid[row][col] == 'S':
+            if grid[row][col] == "S":
                 start_col = col
                 start_row = row
                 break
@@ -26,7 +26,7 @@ def solve_part1(input_text):
             if col < 0 or col >= cols:
                 continue  # Beam exited the manifold
 
-            if grid[row][col] == '^':
+            if grid[row][col] == "^":
                 # Beam hits splitter - count this split
                 split_count += 1
                 new_beams.add(col - 1)  # Left beam
@@ -41,7 +41,7 @@ def solve_part1(input_text):
 
 
 def solve_part2(input_text):
-    lines = input_text.strip().split('\n')
+    lines = input_text.strip().split("\n")
     grid = [list(line) for line in lines]
     rows = len(grid)
     cols = len(grid[0]) if rows > 0 else 0
@@ -51,7 +51,7 @@ def solve_part2(input_text):
     start_row = 0
     for row in range(rows):
         for col in range(cols):
-            if grid[row][col] == 'S':
+            if grid[row][col] == "S":
                 start_col = col
                 start_row = row
                 break
@@ -61,6 +61,7 @@ def solve_part2(input_text):
     # Track timelines as dict of column -> count
     # Each timeline that hits a splitter branches into 2
     from collections import defaultdict
+
     timelines = defaultdict(int)
     timelines[start_col] = 1
 
@@ -70,7 +71,7 @@ def solve_part2(input_text):
             if col < 0 or col >= cols:
                 continue  # Timeline exited the manifold
 
-            if grid[row][col] == '^':
+            if grid[row][col] == "^":
                 # Splitter - each timeline splits into 2
                 new_timelines[col - 1] += count
                 new_timelines[col + 1] += count

@@ -25,10 +25,10 @@ class UnionFind:
 
 
 def solve_part1(input_text):
-    lines = [line.strip() for line in input_text.strip().split('\n') if line.strip()]
+    lines = [line.strip() for line in input_text.strip().split("\n") if line.strip()]
     points = []
     for line in lines:
-        x, y, z = map(int, line.split(','))
+        x, y, z = map(int, line.split(","))
         points.append((x, y, z))
 
     n = len(points)
@@ -40,7 +40,7 @@ def solve_part1(input_text):
             dx = points[i][0] - points[j][0]
             dy = points[i][1] - points[j][1]
             dz = points[i][2] - points[j][2]
-            dist = math.sqrt(dx*dx + dy*dy + dz*dz)
+            dist = math.sqrt(dx * dx + dy * dy + dz * dz)
             distances.append((dist, i, j))
 
     # Sort by distance
@@ -63,10 +63,10 @@ def solve_part1(input_text):
 
 
 def solve_part2(input_text):
-    lines = [line.strip() for line in input_text.strip().split('\n') if line.strip()]
+    lines = [line.strip() for line in input_text.strip().split("\n") if line.strip()]
     points = []
     for line in lines:
-        x, y, z = map(int, line.split(','))
+        x, y, z = map(int, line.split(","))
         points.append((x, y, z))
 
     n = len(points)
@@ -78,7 +78,7 @@ def solve_part2(input_text):
             dx = points[i][0] - points[j][0]
             dy = points[i][1] - points[j][1]
             dz = points[i][2] - points[j][2]
-            dist = math.sqrt(dx*dx + dy*dy + dz*dz)
+            dist = math.sqrt(dx * dx + dy * dy + dz * dz)
             distances.append((dist, i, j))
 
     # Sort by distance

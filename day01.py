@@ -1,5 +1,5 @@
 def solve_part1(input_text):
-    lines = input_text.strip().split('\n')
+    lines = input_text.strip().split("\n")
 
     position = 50  # dial starts at 50
     count_zeros = 0
@@ -8,7 +8,7 @@ def solve_part1(input_text):
         direction = line[0]  # 'L' or 'R'
         distance = int(line[1:])
 
-        if direction == 'L':
+        if direction == "L":
             position = (position - distance) % 100
         else:  # R
             position = (position + distance) % 100
@@ -20,7 +20,7 @@ def solve_part1(input_text):
 
 
 def solve_part2(input_text):
-    lines = input_text.strip().split('\n')
+    lines = input_text.strip().split("\n")
 
     position = 50  # dial starts at 50
     count_zeros = 0
@@ -30,7 +30,7 @@ def solve_part2(input_text):
         distance = int(line[1:])
 
         # Count zeros during this rotation (including landing on 0)
-        if direction == 'L':
+        if direction == "L":
             # Going left: first zero hit at step = position (if position > 0)
             # Then every 100 steps after
             if position > 0:

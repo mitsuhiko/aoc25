@@ -5,30 +5,30 @@ from itertools import combinations
 def parse_line(line):
     """Parse a machine line into target pattern and buttons."""
     # Extract target pattern [.##.#]
-    target_match = re.search(r'\[([.#]+)\]', line)
+    target_match = re.search(r"\[([.#]+)\]", line)
     if not target_match:
         return None
     target_str = target_match.group(1)
     n_lights = len(target_str)
     target = 0
     for i, c in enumerate(target_str):
-        if c == '#':
-            target |= (1 << i)
+        if c == "#":
+            target |= 1 << i
 
     # Extract buttons (0,1,2) (3,4) etc
     buttons = []
-    for match in re.finditer(r'\(([0-9,]+)\)', line):
-        indices = [int(x) for x in match.group(1).split(',')]
+    for match in re.finditer(r"\(([0-9,]+)\)", line):
+        indices = [int(x) for x in match.group(1).split(",")]
         button_mask = 0
         for idx in indices:
-            button_mask |= (1 << idx)
+            button_mask |= 1 << idx
         buttons.append(button_mask)
 
     # Extract joltage requirements {3,5,4,7}
-    joltage_match = re.search(r'\{([0-9,]+)\}', line)
+    joltage_match = re.search(r"\{([0-9,]+)\}", line)
     joltage = []
     if joltage_match:
-        joltage = [int(x) for x in joltage_match.group(1).split(',')]
+        joltage = [int(x) for x in joltage_match.group(1).split(",")]
 
     return target, buttons, n_lights, joltage
 
@@ -46,12 +46,12 @@ def min_presses(target, buttons):
             if result == target:
                 return size
 
-    return float('inf')  # No solution found
+    return float("inf")  # No solution found
 
 
 def solve_part1(input_text):
     total = 0
-    for line in input_text.strip().split('\n'):
+    for line in input_text.strip().split("\n"):
         parsed = parse_line(line)
         if parsed is None:
             continue
@@ -120,7 +120,7 @@ def min_joltage_presses(buttons, joltage, n_counters):
     # Check consistency
     for row in range(pivot_row, n):
         if mat[row][m] != 0:
-            return float('inf')  # Inconsistent
+            return float("inf")  # Inconsistent
 
     # Identify free variables
     free_vars = [j for j in range(m) if j not in pivot_cols]
@@ -135,7 +135,7 @@ def min_joltage_presses(buttons, joltage, n_counters):
         total = 0
         for val in x:
             if val < 0 or val.denominator != 1:
-                return float('inf')
+                return float("inf")
             total += int(val)
         return total
 
@@ -161,7 +161,7 @@ def min_joltage_presses(buttons, joltage, n_counters):
 
     # For small n_free, enumerate intelligently
     # For each free var, find valid range considering all constraints
-    best = [float('inf')]
+    best = [float("inf")]
 
     def eval_solution(free_vals):
         x = [Fraction(0)] * m
@@ -200,8 +200,11 @@ def min_joltage_presses(buttons, joltage, n_counters):
                 row = pivot_to_row[col]
                 if mat[row][fv] > 0:
                     # constraint: mat[row][m] - mat[row][fv] * x[fv] - other_terms >= 0
-                    other = sum(mat[row][free_vars[j]] * heuristic_vals[j]
-                               for j in range(i) if mat[row][free_vars[j]] != 0)
+                    other = sum(
+                        mat[row][free_vars[j]] * heuristic_vals[j]
+                        for j in range(i)
+                        if mat[row][free_vars[j]] != 0
+                    )
                     avail = mat[row][m] - other
                     if avail >= 0:
                         max_here = int(avail / mat[row][fv])
@@ -221,6 +224,7 @@ def min_joltage_presses(buttons, joltage, n_counters):
         max_fv = max(joltage) + 1
 
         from itertools import product
+
         for vals in product(range(max_fv), repeat=n_free):
             result = eval_solution(list(vals))
             if result is not None and result < best[0]:
@@ -231,7 +235,7 @@ def min_joltage_presses(buttons, joltage, n_counters):
 
 def solve_part2(input_text):
     total = 0
-    for line in input_text.strip().split('\n'):
+    for line in input_text.strip().split("\n"):
         parsed = parse_line(line)
         if parsed is None:
             continue
