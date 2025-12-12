@@ -22,7 +22,7 @@ def solve_part1(input_text):
 
 def solve_part2(input_text):
     from collections import defaultdict
-    import bisect
+    from bisect import bisect_left, bisect_right
     from functools import lru_cache
 
     # Parse coordinates
@@ -32,7 +32,6 @@ def solve_part2(input_text):
         red_tiles.append((x, y))
 
     n = len(red_tiles)
-    red_set = set(red_tiles)
 
     # Build edge segments (both horizontal and vertical)
     h_edges = []  # (y, x_min, x_max) for horizontal edges
@@ -55,8 +54,52 @@ def solve_part2(input_text):
     for x, y_min, y_max in v_edges:
         v_edges_by_x[x].append((y_min, y_max))
 
-    # Pre-sort vertical edge x-coordinates for efficient ray casting
+    # Pre-sort edge coordinates for efficient queries
+    sorted_h_y = sorted(h_edges_by_y.keys())
     sorted_v_x = sorted(v_edges_by_x.keys())
+
+    # Build a 2D range index for "any vertex strictly inside rectangle" queries.
+    # This replaces scanning all vertices per candidate rectangle.
+    xs = sorted({x for x, _y in red_tiles})
+    ys = sorted({y for _x, y in red_tiles})
+    nx = len(xs)
+
+    vertex_tree = [[] for _ in range(nx + 1)]
+    for x, y in red_tiles:
+        xi = bisect_left(xs, x) + 1
+        yi = bisect_left(ys, y) + 1
+        i = xi
+        while i <= nx:
+            vertex_tree[i].append(yi)
+            i += i & -i
+    for bucket in vertex_tree:
+        bucket.sort()
+
+    def vertex_prefix_count(x_idx, y_idx):
+        result = 0
+        i = x_idx
+        while i > 0:
+            result += bisect_right(vertex_tree[i], y_idx)
+            i -= i & -i
+        return result
+
+    def any_vertex_strictly_inside(rx_min, rx_max, ry_min, ry_max):
+        x_hi = bisect_left(xs, rx_max)  # x < rx_max
+        x_lo = bisect_right(xs, rx_min)  # x <= rx_min
+        if x_lo >= x_hi:
+            return False
+
+        y_hi = bisect_left(ys, ry_max)  # y < ry_max
+        y_lo = bisect_right(ys, ry_min)  # y <= ry_min
+        if y_lo >= y_hi:
+            return False
+
+        return (
+            vertex_prefix_count(x_hi, y_hi)
+            - vertex_prefix_count(x_lo, y_hi)
+            - vertex_prefix_count(x_hi, y_lo)
+            + vertex_prefix_count(x_lo, y_lo)
+        ) > 0
 
     @lru_cache(maxsize=50000)
     def point_inside_or_on_boundary(px, py):
@@ -75,7 +118,7 @@ def solve_part2(input_text):
         # Ray casting: count crossings going right - use sorted list with binary search
         crossings = 0
         # Use binary search to find first x > px
-        start_idx = bisect.bisect_right(sorted_v_x, px)
+        start_idx = bisect_right(sorted_v_x, px)
         for i in range(start_idx, len(sorted_v_x)):
             x = sorted_v_x[i]
             for y_min, y_max in v_edges_by_x[x]:
@@ -88,9 +131,8 @@ def solve_part2(input_text):
         """Check if rectangle is entirely inside polygon"""
         # Check that no red tile is strictly inside the rectangle FIRST
         # This is a fast check that can reject many candidates early
-        for rx, ry in red_tiles:
-            if rx_min < rx < rx_max and ry_min < ry < ry_max:
-                return False
+        if any_vertex_strictly_inside(rx_min, rx_max, ry_min, ry_max):
+            return False
 
         # Check all 4 geometric corners are inside or on boundary
         corners = [
@@ -105,37 +147,27 @@ def solve_part2(input_text):
 
         # Check if any boundary edge completely crosses through the rectangle
         # (i.e., the edge spans the full width/height and cuts the rectangle in two)
+        y_start = bisect_right(sorted_h_y, ry_min)
+        y_stop = bisect_left(sorted_h_y, ry_max)
+        for y in sorted_h_y[y_start:y_stop]:
+            for x_min, x_max in h_edges_by_y[y]:
+                if x_min <= rx_min and x_max >= rx_max:
+                    # Edge spans full width - rectangle is cut in two
+                    return False
+                if rx_min < x_min < rx_max or rx_min < x_max < rx_max:
+                    # An edge endpoint lies strictly inside the rectangle
+                    return False
 
-        # Horizontal edges that cross full width - use spatial index
-        for y in range(ry_min + 1, ry_max):
-            if y in h_edges_by_y:
-                for x_min, x_max in h_edges_by_y[y]:
-                    if x_min <= rx_min and x_max >= rx_max:
-                        # Edge spans full width - rectangle is cut in two
-                        return False
-
-        # Vertical edges that cross full height - use spatial index
-        for x in range(rx_min + 1, rx_max):
-            if x in v_edges_by_x:
-                for y_min, y_max in v_edges_by_x[x]:
-                    if y_min <= ry_min and y_max >= ry_max:
-                        # Edge spans full height - rectangle is cut in two
-                        return False
-
-        # Also check for edges that have endpoints strictly inside the rectangle
-        # (meaning the boundary turns inside the rectangle)
-        for y in range(ry_min + 1, ry_max):
-            if y in h_edges_by_y:
-                for x_min, x_max in h_edges_by_y[y]:
-                    # Check if endpoints are strictly inside x-range
-                    if rx_min < x_min < rx_max or rx_min < x_max < rx_max:
-                        return False
-
-        for x in range(rx_min + 1, rx_max):
-            if x in v_edges_by_x:
-                for y_min, y_max in v_edges_by_x[x]:
-                    if ry_min < y_min < ry_max or ry_min < y_max < ry_max:
-                        return False
+        x_start = bisect_right(sorted_v_x, rx_min)
+        x_stop = bisect_left(sorted_v_x, rx_max)
+        for x in sorted_v_x[x_start:x_stop]:
+            for y_min, y_max in v_edges_by_x[x]:
+                if y_min <= ry_min and y_max >= ry_max:
+                    # Edge spans full height - rectangle is cut in two
+                    return False
+                if ry_min < y_min < ry_max or ry_min < y_max < ry_max:
+                    # An edge endpoint lies strictly inside the rectangle
+                    return False
 
         return True
 

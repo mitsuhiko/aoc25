@@ -1,5 +1,4 @@
-import math
-from collections import defaultdict
+from functools import lru_cache
 
 
 class UnionFind:
@@ -8,92 +7,104 @@ class UnionFind:
         self.rank = [0] * n
 
     def find(self, x):
-        if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])
-        return self.parent[x]
+        parent = self.parent
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
 
     def union(self, x, y):
-        px, py = self.find(x), self.find(y)
+        px = self.find(x)
+        py = self.find(y)
         if px == py:
             return False
-        if self.rank[px] < self.rank[py]:
+
+        rank = self.rank
+        if rank[px] < rank[py]:
             px, py = py, px
         self.parent[py] = px
-        if self.rank[px] == self.rank[py]:
-            self.rank[px] += 1
+        if rank[px] == rank[py]:
+            rank[px] += 1
         return True
 
 
-def solve_part1(input_text):
-    lines = [line.strip() for line in input_text.strip().split("\n") if line.strip()]
-    points = []
-    for line in lines:
-        x, y, z = map(int, line.split(","))
-        points.append((x, y, z))
+_IDX_BITS = 10
+_IDX_MASK = (1 << _IDX_BITS) - 1
+_EDGE_SHIFT = _IDX_BITS * 2
 
-    n = len(points)
 
-    # Calculate all pairwise distances
-    distances = []
-    for i in range(n):
+@lru_cache(maxsize=1)
+def _precompute(input_text):
+    xs = []
+    ys = []
+    zs = []
+    for line in input_text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        x_str, y_str, z_str = line.split(",")
+        xs.append(int(x_str))
+        ys.append(int(y_str))
+        zs.append(int(z_str))
+
+    n = len(xs)
+    if n > (1 << _IDX_BITS):
+        raise ValueError("Too many points for packed indices")
+
+    edges = []
+    append = edges.append
+    for i in range(n - 1):
+        xi = xs[i]
+        yi = ys[i]
+        zi = zs[i]
+        base_i = i << _IDX_BITS
         for j in range(i + 1, n):
-            dx = points[i][0] - points[j][0]
-            dy = points[i][1] - points[j][1]
-            dz = points[i][2] - points[j][2]
-            dist = math.sqrt(dx * dx + dy * dy + dz * dz)
-            distances.append((dist, i, j))
+            dx = xi - xs[j]
+            dy = yi - ys[j]
+            dz = zi - zs[j]
+            d2 = dx * dx + dy * dy + dz * dz
+            append((d2 << _EDGE_SHIFT) | base_i | j)
+    edges.sort()
 
-    # Sort by distance
-    distances.sort()
+    return xs, edges
 
-    # Connect 1000 closest pairs
+
+def solve_part1(input_text):
+    xs, edges = _precompute(input_text)
+    n = len(xs)
+
     uf = UnionFind(n)
-    for _, i, j in distances[:1000]:
+    for edge in edges[:1000]:
+        i = (edge >> _IDX_BITS) & _IDX_MASK
+        j = edge & _IDX_MASK
         uf.union(i, j)
 
     # Count circuit sizes
-    circuit_sizes = defaultdict(int)
+    circuit_sizes = [0] * n
     for i in range(n):
         root = uf.find(i)
         circuit_sizes[root] += 1
 
     # Get three largest
-    sizes = sorted(circuit_sizes.values(), reverse=True)
+    sizes = sorted((x for x in circuit_sizes if x), reverse=True)
     return sizes[0] * sizes[1] * sizes[2]
 
 
 def solve_part2(input_text):
-    lines = [line.strip() for line in input_text.strip().split("\n") if line.strip()]
-    points = []
-    for line in lines:
-        x, y, z = map(int, line.split(","))
-        points.append((x, y, z))
+    xs, edges = _precompute(input_text)
+    n = len(xs)
 
-    n = len(points)
-
-    # Calculate all pairwise distances
-    distances = []
-    for i in range(n):
-        for j in range(i + 1, n):
-            dx = points[i][0] - points[j][0]
-            dy = points[i][1] - points[j][1]
-            dz = points[i][2] - points[j][2]
-            dist = math.sqrt(dx * dx + dy * dy + dz * dz)
-            distances.append((dist, i, j))
-
-    # Sort by distance
-    distances.sort()
-
-    # Connect pairs until all in one circuit
     uf = UnionFind(n)
     num_components = n
 
-    for _, i, j in distances:
+    for edge in edges:
+        i = (edge >> _IDX_BITS) & _IDX_MASK
+        j = edge & _IDX_MASK
         if uf.union(i, j):
             num_components -= 1
             if num_components == 1:
                 # This was the last connection that unified everything
-                return points[i][0] * points[j][0]
+                return xs[i] * xs[j]
 
     return None
 
