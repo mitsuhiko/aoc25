@@ -1,23 +1,23 @@
-def is_invalid_id(num):
-    """
-    Check if a number is an invalid ID.
-    Invalid IDs are made of some sequence of digits repeated twice.
-    E.g., 11 (1+1), 6464 (64+64), 123123 (123+123)
-    """
-    s = str(num)
-    # Must have even length to be split in half
-    if len(s) % 2 != 0:
-        return False
+def generate_invalid_ids_part1_in_range(start, end):
+    """Generate all Part 1 invalid IDs (exactly 2 repetitions) in range."""
+    start_digits = len(str(start))
+    end_digits = len(str(end))
+    invalid_ids = set()
 
-    # Split in half and check if both halves are equal
-    mid = len(s) // 2
-    first_half = s[:mid]
-    second_half = s[mid:]
+    for num_digits in range(start_digits, end_digits + 1):
+        if num_digits % 2 == 0:  # Must be even for 2 repetitions
+            pattern_len = num_digits // 2
 
-    # Check if they match and no leading zeros (except for "0" itself)
-    if first_half == second_half and (first_half[0] != "0" or first_half == "0"):
-        return True
-    return False
+            # Generate all patterns of this length
+            pattern_min = 10 ** (pattern_len - 1)  # No leading zeros
+            pattern_max = 10**pattern_len - 1
+
+            for pattern in range(pattern_min, pattern_max + 1):
+                invalid_num = int(str(pattern) * 2)
+                if start <= invalid_num <= end:
+                    invalid_ids.add(invalid_num)
+
+    return invalid_ids
 
 
 def solve_part1(input_text):
@@ -27,37 +27,37 @@ def solve_part1(input_text):
 
     for range_str in ranges:
         start, end = map(int, range_str.split("-"))
-        for num in range(start, end + 1):
-            if is_invalid_id(num):
-                total += num
+        invalid_ids = generate_invalid_ids_part1_in_range(start, end)
+        total += sum(invalid_ids)
 
     return total
 
 
-def is_invalid_id_part2(num):
-    """
-    Check if a number is an invalid ID for Part 2.
-    Invalid IDs are made of some sequence of digits repeated at least twice.
-    E.g., 11 (1 twice), 111 (1 three times), 565656 (56 three times), 824824824 (824 three times)
-    """
-    s = str(num)
-    length = len(s)
+def generate_invalid_ids_in_range(start, end):
+    """Generate all invalid IDs (2+ repetitions) in range."""
+    start_digits = len(str(start))
+    end_digits = len(str(end))
+    invalid_ids = set()
 
-    # Try all possible pattern lengths from 1 to length//2
-    # (we need at least 2 repetitions)
-    for pattern_len in range(1, length // 2 + 1):
-        # Check if the length is divisible by pattern length
-        if length % pattern_len == 0:
-            pattern = s[:pattern_len]
-            # Check if no leading zeros (except for "0" itself)
-            if pattern[0] == "0" and pattern != "0":
-                continue
-            # Check if the entire string is this pattern repeated
-            num_repetitions = length // pattern_len
-            if pattern * num_repetitions == s:
-                return True
+    for num_digits in range(start_digits, end_digits + 1):
+        for pattern_len in range(1, num_digits // 2 + 1):
+            if num_digits % pattern_len == 0:
+                repetitions = num_digits // pattern_len
 
-    return False
+                # Generate all patterns of this length
+                pattern_min = 10 ** (pattern_len - 1) if pattern_len > 1 else 1
+                pattern_max = 10**pattern_len - 1
+
+                for pattern in range(pattern_min, pattern_max + 1):
+                    pattern_str = str(pattern)
+                    if len(pattern_str) != pattern_len:
+                        continue
+
+                    invalid_num = int(pattern_str * repetitions)
+                    if start <= invalid_num <= end:
+                        invalid_ids.add(invalid_num)
+
+    return invalid_ids
 
 
 def solve_part2(input_text):
@@ -67,9 +67,8 @@ def solve_part2(input_text):
 
     for range_str in ranges:
         start, end = map(int, range_str.split("-"))
-        for num in range(start, end + 1):
-            if is_invalid_id_part2(num):
-                total += num
+        invalid_ids = generate_invalid_ids_in_range(start, end)
+        total += sum(invalid_ids)
 
     return total
 

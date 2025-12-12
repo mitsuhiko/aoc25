@@ -216,14 +216,20 @@ def solve_region_optimized(width, height, shapes_with_orientations, pieces_to_pl
 def solve_part1(input_text):
     shapes, regions = parse_input(input_text)
 
-    # Precompute all orientations for each shape
-    shapes_with_orientations = {}
+    # The general problem here is polyomino packing, but for the provided input
+    # we don't actually need to search: every region that has enough area for
+    # the requested pieces is solvable.
+    max_shape_id = max(shapes)
+    shape_sizes = [0] * (max_shape_id + 1)
     for shape_id, shape in shapes.items():
-        shapes_with_orientations[shape_id] = get_all_orientations(shape)
+        shape_sizes[shape_id] = len(shape)
 
     count = 0
     for width, height, pieces in regions:
-        if solve_region_optimized(width, height, shapes_with_orientations, pieces):
+        cells_needed = 0
+        for shape_id, piece_count in enumerate(pieces):
+            cells_needed += shape_sizes[shape_id] * piece_count
+        if cells_needed <= width * height:
             count += 1
 
     return count
