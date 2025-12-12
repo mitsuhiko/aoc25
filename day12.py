@@ -241,7 +241,7 @@ def solve_part2(input_text):
 
 
 if __name__ == "__main__":
-    with open("day12.txt") as f:
+    with open("inputs/day12.txt") as f:
         input_text = f.read()
 
     print(f"Part 1: {solve_part1(input_text)}")

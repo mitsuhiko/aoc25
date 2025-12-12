@@ -15,13 +15,13 @@ test:
 $(TEST_TARGETS): test-day%:
 	@printf "Testing test-day$*... "
 	@start=$$(python3 -c 'import time; print(time.time())'); \
-	if python3 day$*.py | diff -q - day$*.out > /dev/null 2>&1; then \
+	if python3 day$*.py | diff -q - outputs/day$*.txt > /dev/null 2>&1; then \
 		end=$$(python3 -c 'import time; print(time.time())'); \
 		elapsed=$$(python3 -c "print(f'{$$end - $$start:.3f}s')"); \
 		echo "OK ($$elapsed)"; \
 	else \
 		echo "FAILED"; \
-		python3 day$*.py | diff - day$*.out; \
+		python3 day$*.py | diff - outputs/day$*.txt; \
 		exit 1; \
 	fi
 

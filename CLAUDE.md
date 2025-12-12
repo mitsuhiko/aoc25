@@ -10,7 +10,8 @@ This is an Advent of Code 2025 repository. Note that 2025 has **12 days of puzzl
 
 Each day follows a consistent pattern:
 - `dayXX.py` - Python solution file (e.g., `day01.py`, `day02.py`, ..., `day12.py`)
-- `dayXX.txt` - Puzzle input file (e.g., `day01.txt`, `day02.txt`, ..., `day12.txt`)
+- `inputs/dayXX.txt` - Puzzle input file (e.g., `inputs/day01.txt`, ..., `inputs/day12.txt`)
+- `outputs/dayXX.txt` - Expected output file for testing (e.g., `outputs/day01.txt`, ..., `outputs/day12.txt`)
 
 ## Running Solutions
 
@@ -35,7 +36,7 @@ def solve_part2(input_text):
     return result
 
 if __name__ == "__main__":
-    with open("dayXX.txt") as f:
+    with open("inputs/dayXX.txt") as f:
         input_text = f.read()
 
     print(f"Part 1: {solve_part1(input_text)}")
@@ -57,7 +58,7 @@ Example workflow:
 cd .claude/skills/web-browser && ./tools/start.js
 # Wait a moment for Chrome to start
 cd .claude/skills/web-browser && ./tools/nav.js https://adventofcode.com/2025/day/2/input
-cd .claude/skills/web-browser && ./tools/eval.js 'document.body.innerText' > day02.txt
+cd .claude/skills/web-browser && ./tools/eval.js 'document.body.innerText' > inputs/day02.txt
 ```
 
 Note: The user's session cookies are needed to fetch inputs, so the web-browser approach is required rather than simple curl commands.
