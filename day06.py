@@ -125,7 +125,12 @@ def solve_part2(input_text):
 
 
 if __name__ == "__main__":
-    with open("inputs/day06.txt") as f:
+    import sys
+
+    # Use command-line argument if provided, else default to inputs/day06.txt
+    input_file = sys.argv[1] if len(sys.argv) > 1 else "inputs/day06.txt"
+
+    with open(input_file) as f:
         input_text = f.read()
 
     print(f"Part 1: {solve_part1(input_text)}")
