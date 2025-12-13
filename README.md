@@ -17,3 +17,10 @@ from replicating anything anyways (as demonstrated by this repository) but it
 makes it harder for people to independently run code far in the future when AOC
 no longer exists.
 
+## License
+
+This repository does not contain any human generated code at all.  As such it
+cannot be copyrighted and should be seen as content in the public domain.  To
+the extend it is possible or necessary to license it, it should be considered
+to be licensed under the Apache License 2.0.
+
