@@ -1,3 +1,20 @@
+"""
+This puzzle involves counting paths through a directed acyclic graph (DAG). The input
+defines a graph where each node has a list of outgoing edges to other nodes. The core
+problem is to count all distinct paths from a start node to a designated end node.
+
+Part 1 requires counting all paths from a node labeled "you" to a node labeled "out".
+This is a classic dynamic programming problem that can be solved efficiently using
+memoization: for each node, the total number of paths to the destination equals the
+sum of paths from all its child nodes.
+
+Part 2 extends the problem by requiring paths to pass through two specific intermediate
+nodes ("dac" and "fft") in any order. The algorithm tracks which required nodes have
+been visited along each path using state flags, and only counts paths that visit both
+required nodes before reaching the destination. The memoization strategy includes these
+flags as part of the cache key to handle the constraint efficiently.
+"""
+
 from functools import cache
 
 

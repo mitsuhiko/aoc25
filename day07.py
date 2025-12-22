@@ -1,3 +1,22 @@
+"""Beam splitting simulation in a 2D grid.
+
+Part 1 simulates multiple beams traveling downward through a grid. Each beam starts from
+a designated starting position and moves vertically down. When a beam encounters a splitter
+(represented by '^'), it stops and creates two new beams that continue from the positions
+immediately to the left and right of the splitter. Beams pass through empty spaces without
+interaction. The goal is to count the total number of splits that occur as all beams
+traverse the grid until they either exit the grid boundaries or reach the bottom.
+
+Part 2 introduces a quantum mechanics interpretation where a single particle takes all
+possible paths simultaneously. When the particle encounters a splitter, it branches into
+parallel timelines - one where it went left and one where it went right. Each timeline can
+further branch at subsequent splitters, creating an exponentially growing number of
+timelines. The computation tracks how many timelines exist after the particle has completed
+all possible paths through the grid, requiring careful counting of timeline multiplicities
+as they split and potentially converge at the same grid positions.
+"""
+
+
 def solve_part1(input_text):
     lines = input_text.strip().split("\n")
     grid = [list(line) for line in lines]

@@ -1,3 +1,21 @@
+"""
+This puzzle involves optimizing button presses to configure machines with indicator lights and joltage counters.
+
+Part 1 requires toggling indicator lights from an initial all-off state to a target pattern.
+Each button toggles a specific set of lights, and pressing a button multiple times compounds the effect.
+This is a linear system over GF(2) (binary field): each light's final state is the XOR of all button
+presses affecting it. The goal is to find the minimum number of total button presses (L1-norm) that
+achieves the target configuration. The solution uses Gaussian elimination over GF(2) to find the
+solution space, then searches through free variable assignments to minimize the total press count.
+
+Part 2 switches to joltage counters that start at zero and must reach specific target values. Each
+button press increments a set of counters by 1 (no toggling, just addition). This becomes a linear
+system over the rationals: A*x = b, where x is the number of times each button is pressed, A is the
+button-to-counter incidence matrix, and b is the target joltage vector. The solution uses Gaussian
+elimination to find the solution space in rational form, then searches through integer assignments
+of free variables to find the minimum L1-norm solution (fewest total button presses).
+"""
+
 import re
 from fractions import Fraction
 from math import gcd

@@ -1,3 +1,24 @@
+"""
+Advent of Code 2025 Day 2: Pattern Repetition Detection
+
+This puzzle involves identifying numbers that consist of a repeating digit pattern.
+Given a series of numeric ranges, the task is to find all numbers within those ranges
+that can be formed by repeating a sequence of digits multiple times.
+
+Part 1 focuses on numbers with exactly 2 repetitions: a number is invalid if it can
+be expressed as a pattern repeated exactly twice (e.g., 11, 6464, 123123). The
+algorithm generates candidates by iterating through possible pattern lengths, creating
+all valid patterns (excluding those with leading zeros), and checking if the resulting
+repeated number falls within each range.
+
+Part 2 extends the criteria to numbers with 2 or more repetitions: any number that
+can be formed by repeating a pattern at least twice is invalid (e.g., 111, 12341234,
+1212121212). This requires checking multiple divisors of the number's digit length
+to find all possible pattern lengths that evenly divide the total length. The solution
+sums all unique invalid numbers found across all ranges.
+"""
+
+
 def generate_invalid_ids_part1_in_range(start, end):
     """Generate all Part 1 invalid IDs (exactly 2 repetitions) in range."""
     start_digits = len(str(start))

@@ -1,3 +1,20 @@
+"""Day 5: Range Membership and Coverage Problem
+
+This puzzle involves working with inclusive numeric ranges and testing membership. The input
+consists of two sections: a list of ranges (e.g., "3-5" represents IDs 3, 4, and 5) and a
+list of individual IDs to test. Ranges can overlap, and an ID is considered valid if it
+falls within any of the given ranges.
+
+Part 1 asks how many IDs from the provided list fall within at least one range. This requires
+efficient range lookup, implemented using range merging to consolidate overlapping ranges
+followed by binary search for O(log n) membership testing.
+
+Part 2 asks for the total count of all unique IDs covered by the ranges themselves, ignoring
+the individual ID list. This is solved by merging overlapping ranges and summing the size of
+each merged range.
+"""
+
+
 def parse_input(input_text):
     """Parse the input into ranges and ingredient IDs."""
     parts = input_text.strip().split("\n\n")

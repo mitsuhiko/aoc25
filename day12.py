@@ -1,3 +1,23 @@
+"""Day 12: Polyomino Packing Problem
+
+This puzzle involves packing irregularly-shaped pieces (polyominoes) into rectangular regions
+on a 2D grid. Given a set of standard shapes defined by '#' characters on a grid, and a list
+of rectangular regions with dimensions and required piece counts, the goal is to determine how
+many regions can successfully fit all their required pieces.
+
+The puzzle is a variant of the polyomino packing problem, which is NP-complete in general.
+Pieces can be rotated and flipped (8 possible orientations: 4 rotations x 2 flips), and must
+be placed on a discrete grid without overlapping. The '.' characters in shape definitions do
+not block other pieces, meaning shapes can interlock. The solution uses backtracking with
+pruning strategies including area checking and largest-piece-first heuristics to determine
+feasibility for each region.
+
+Part 1 asks to count how many regions can fit all their listed pieces. For the given input,
+a simple area-based heuristic suffices: if the total area of all required pieces fits within
+the region's area, the region is solvable. Part 2 awards a free completion star.
+"""
+
+
 def parse_input(input_text):
     lines = input_text.strip().split("\n")
 

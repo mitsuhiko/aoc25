@@ -1,3 +1,20 @@
+"""Advent of Code 2025 Day 6: Multi-directional worksheet parsing and arithmetic.
+
+This puzzle involves parsing a 2D grid representation of mathematical problems arranged in
+an unusual columnar format. In Part 1, problems are organized vertically within columns,
+where each problem consists of numbers stacked on top of each other, with an operator
+(+ or *) at the bottom. Problems are separated by columns of spaces. The task is to parse
+each problem, compute its result using the specified operation, and sum all results.
+
+Part 2 introduces a twist: the same grid must be reinterpreted as reading numbers column-wise
+(right-to-left across columns), where each column represents a single number with digits
+arranged vertically (most significant digit at top). This requires a complete reparse of
+the grid structure and demonstrates the importance of understanding data orientation in
+parsing algorithms. The core challenge is transforming 2D spatial data into computational
+operations while handling two different reading directions.
+"""
+
+
 def parse_problems(input_text):
     """Parse the worksheet into a list of (numbers, operator) tuples."""
     lines = input_text.rstrip("\n").split("\n")

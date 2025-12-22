@@ -1,3 +1,19 @@
+"""Day 1: Circular Dial Rotation Simulation
+
+This puzzle involves simulating rotations on a circular dial numbered 0-99. The dial
+starts at position 50 and responds to a sequence of rotation instructions. Each
+instruction specifies a direction (L for left/decreasing or R for right/increasing)
+and a distance to rotate. Rotations wrap around modulo 100, so moving left from 0
+reaches 99, and moving right from 99 reaches 0.
+
+Part 1 counts how many times the dial lands on position 0 after completing each
+rotation instruction. Part 2 extends this by counting all instances where the dial
+passes through position 0 during a rotation, not just the final position. This
+requires calculating how many complete cycles of 100 the dial makes during each
+rotation, accounting for the starting position and direction of movement.
+"""
+
+
 def solve_part1(input_text):
     lines = input_text.strip().split("\n")
 

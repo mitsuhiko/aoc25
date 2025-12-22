@@ -1,3 +1,24 @@
+"""
+Day 9: Largest Rectangle Problems
+
+Part 1 solves the problem of finding the maximum axis-aligned rectangle that can be
+formed using any two points from a given set as opposite corners. The input consists
+of coordinate pairs representing red tile positions on a grid. The solution uses a
+brute-force approach, examining all pairs of points and computing the rectangle area
+as (|x2-x1|+1) * (|y2-y1|+1), tracking the maximum area found.
+
+Part 2 adds a constraint: rectangles must be entirely contained within a polygon
+formed by connecting consecutive red tiles (wrapping around). This polygon is filled
+with green tiles, and valid rectangles can only contain red or green tiles. The
+solution builds a polygon from the input points by connecting consecutive tiles with
+horizontal and vertical edges. It then validates each candidate rectangle by checking:
+(1) no red tiles lie strictly inside, (2) all geometric corners are inside or on the
+polygon boundary using ray-casting, and (3) no boundary edges cut through the rectangle.
+Spatial indexing with binary indexed trees and sorted edge lists optimize the geometric
+queries, while sorting candidates by descending area enables early termination.
+"""
+
+
 def solve_part1(input_text):
     # Parse coordinates
     red_tiles = []

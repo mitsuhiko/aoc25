@@ -1,3 +1,19 @@
+"""Day 8: Minimum Spanning Tree with Union-Find
+
+This puzzle involves connecting points in 3D space using a greedy approach based on
+Euclidean distances. Given a set of junction boxes at various (x, y, z) coordinates,
+the task is to progressively connect pairs of boxes starting with the closest pairs.
+When two boxes are connected, they form a circuit, and boxes can transitively connect
+through shared circuits. This is essentially Kruskal's algorithm for constructing a
+minimum spanning forest.
+
+Part 1 asks for the product of the three largest circuit sizes after making exactly
+1000 connections. Part 2 requires continuing the connection process until all boxes
+form a single circuit, then returning the product of the X coordinates of the final
+pair that unified the graph. The solution uses a Union-Find (disjoint set) data
+structure to efficiently track connected components and determine when merges occur.
+"""
+
 from functools import lru_cache
 
 

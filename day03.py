@@ -1,3 +1,23 @@
+"""Day 3: Maximum Subsequence Selection
+
+This puzzle involves selecting digits from sequences to maximize numeric values.
+Each line of input represents a sequence of single-digit numbers (1-9).
+
+Part 1 requires selecting exactly 2 digits from each sequence (maintaining their
+relative order) to form the largest possible 2-digit number. The solution uses
+a brute-force approach, checking all pairs of positions (i, j) where i < j,
+computing the resulting 2-digit number, and finding the maximum.
+
+Part 2 extends this to selecting exactly 12 digits from each sequence to form
+the largest possible 12-digit number. This is solved using a greedy algorithm:
+at each position in the result, select the largest available digit from the
+remaining valid range, ensuring enough digits remain to complete the selection.
+The algorithm maintains a sliding window constraint - for each of the 12 positions
+being filled, it identifies the rightmost position from which a digit can be
+selected while still leaving enough digits for the remaining positions.
+"""
+
+
 def solve_part1(input_text):
     total = 0
     for line in input_text.strip().split("\n"):

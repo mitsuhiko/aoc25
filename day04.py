@@ -1,3 +1,22 @@
+"""
+Day 4: Accessibility Analysis on a Grid
+
+This puzzle involves analyzing a 2D grid containing objects (marked with '@') and
+determining which objects are accessible based on their local neighborhood density.
+An object is accessible if it has fewer than 4 adjacent objects in the 8 surrounding
+positions (including diagonals). Part 1 requires counting how many objects are
+initially accessible in the given grid configuration.
+
+Part 2 extends this to a cascading removal simulation. After identifying and removing
+all accessible objects, the grid state changes, potentially making previously
+inaccessible objects now accessible. This process repeats iteratively until no more
+objects can be removed. The challenge is to compute the total number of objects that
+can be removed through this iterative process. This is similar to cellular automaton
+concepts where the state of cells depends on their neighbors and evolves over discrete
+time steps.
+"""
+
+
 def solve_part1(input_text):
     grid = input_text.strip().split("\n")
     rows = len(grid)
